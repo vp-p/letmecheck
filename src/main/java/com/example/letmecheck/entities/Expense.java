@@ -1,47 +1,38 @@
 package com.example.letmecheck.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name= "tbl_user")
-public class User implements Serializable {
+@Table(name = "tbl_expense")
+public class Expense implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String cpf;
-    private String password;
-
-    @OneToMany(mappedBy = "holder")
-    private List<Expense> expenses = new ArrayList<>();
+    private BigDecimal cost;
+    private String description;
     
-        public User() {
-        }
-        
-        public User(Long id, String name, String cpf, String password) {
-            this.id = id;
-            this.name = name;
-            this.cpf = cpf;
-            this.password = password;
+    @ManyToOne
+    @JoinColumn(name = "holder_id")
+    private User holder;
+
+    public Expense() {
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public Expense(Long id, BigDecimal cost, String description) {
+        this.id = id;
+        this.cost = cost;
+        this.description = description;
     }
 
     public Long getId() {
@@ -52,24 +43,28 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getCpf() {
-        return cpf;
+    public BigDecimal getCost() {
+        return cost;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 
-    public String getPassword() {
-        return password;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public List<Expense> getExpenses() {
-        return expenses;
+    public User getHolder() {
+        return holder;
+    }
+
+    public void setHolder(User holder) {
+        this.holder = holder;
     }
 
     @Override
@@ -88,7 +83,7 @@ public class User implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        User other = (User) obj;
+        Expense other = (Expense) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -99,6 +94,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", name=" + name + ", cpf=" + cpf + ", password=" + password + "]";
+        return "Expense [id=" + id + ", cost=" + cost + ", description=" + description + "]";
     }
+    
 }
