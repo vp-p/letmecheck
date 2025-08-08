@@ -26,13 +26,14 @@ public class Expense implements Serializable {
     @JoinColumn(name = "holder_id")
     private User holder;
 
-    public Expense() {
+    public Expense(){
     }
 
-    public Expense(Long id, BigDecimal cost, String description) {
+    public Expense(Long id, BigDecimal cost, String description, User holder) {
         this.id = id;
         this.cost = cost;
         this.description = description;
+        this.holder = holder;
     }
 
     public Long getId() {
@@ -66,6 +67,8 @@ public class Expense implements Serializable {
     public void setHolder(User holder) {
         this.holder = holder;
     }
+
+
 
     @Override
     public int hashCode() {
