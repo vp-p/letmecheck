@@ -2,83 +2,65 @@ package com.example.letmecheck.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tbl_expense")
-public class Expense implements Serializable {
+@Table(name = "tbl_day")
+public class Day implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private BigDecimal cost;
-    private String description;
+    private LocalDate localDate;
+    private BigDecimal balance;
+
+    @OneToMany(mappedBy = "day")
+    private List<Expense> expenses = new ArrayList<>();;
     
-    @ManyToOne
-    @JoinColumn(name = "holder_id")
-    private User holder;
-
-    @ManyToOne
-    @JoinColumn(name = "day_id")
-    private Day day;
-
-    public Expense(){
+    public Day(){
     }
 
-    public Expense(Long id, BigDecimal cost, String description, Day day, User holder) {
+    public Day(Long id, LocalDate localDate, BigDecimal balance){
         this.id = id;
-        this.cost = cost;
-        this.description = description;
-        this.day = day;
-        this.holder = holder;
+        this.localDate = localDate;
+        this.balance = balance;
     }
 
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
-    public BigDecimal getCost() {
-        return cost;
+    public LocalDate getLocalDate() {
+        return localDate;
+    }
+    public void setLocalDate(LocalDate LocalDate) {
+        this.localDate = LocalDate;
+    }
+    public BigDecimal getBalance() {
+        return balance;
+    }
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public User getHolder() {
-        return holder;
-    }
-
-    public void setHolder(User holder) {
-        this.holder = holder;
-    }
-
-    public Day getDay() {
-        return day;
-    }
-
-    public void setDay(Day day) {
-        this.day = day;
+    @JsonIgnore
+    @OneToMany(mappedBy = "day")
+    public List<Expense> getExpenses() {
+        return expenses;
     }
 
     @Override
@@ -88,7 +70,7 @@ public class Expense implements Serializable {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -97,7 +79,7 @@ public class Expense implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Expense other = (Expense) obj;
+        Day other = (Day) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -105,10 +87,15 @@ public class Expense implements Serializable {
             return false;
         return true;
     }
-
+    
+    
     @Override
     public String toString() {
-        return "Expense [id=" + id + ", cost=" + cost + ", description=" + description + "]";
+        return "Day [id=" + id + ", LocalDate=" + localDate + ", balance=" + balance + "]";
     }
+
+    
+
+
     
 }
